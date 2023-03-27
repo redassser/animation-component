@@ -1,0 +1,12 @@
+.wrapper {
+    display: flex;
+    flex-direction: column-reverse;
+    background-color: aqua;
+    width: 100px;
+    height: 100px;
+    margin: auto;
+}
+.options {
+    background-color: pink;
+    width: 100%;
+}
