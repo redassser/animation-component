@@ -1,0 +1,19 @@
+.wrapper {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    background-color: lightgray;
+    width: 500px;
+    height: 500px;
+    margin: auto;
+    outline: 6px solid grey;
+}
+.options {
+    background-color:grey;
+    padding: 6px;
+    width: 100%;
+    gap: 10px;
+}
+.screen {
+    background-color: pink;
+}
