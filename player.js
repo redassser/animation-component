@@ -9,9 +9,9 @@ function handleErr(e) {
         intervalID = null; 
     }
 }
-function repeat(id) {
+function repeat(id, mult) {
     if(intervalID === null) {
-        intervalID = setInterval(step, baseTime, id);
+        intervalID = setInterval(step, baseTime/mult, id);
     }
 }
 function stop(id) {
@@ -30,11 +30,22 @@ function next(id) {
 function step(id) {
     animationStep(id).catch(handleErr); 
 }
+//Mult and html changing
+function nextmult(id, current) {
+    const multarray = [1,2,4,8]; 
+    const elem = document.querySelector(`i-player[name='${id}']`).shadowRoot;
+    const multiplier = multarray[multarray.indexOf(current)+1] ?? multarray[0];
+    elem.getElementById("multbutton").setAttribute("onClick", `nextmult('${id}',${multiplier})`);
+    elem.getElementById("multbutton").innerHTML = multiplier+"x";
+    elem.getElementById("repeatbutton").setAttribute("onClick", `repeat('${id}', ${multiplier})`);
+}
 
 //HTML for player
 class IPlayer extends HTMLElement {
     constructor() {
         super();
+    }
+    connectedCallback() {
         this.attachShadow({mode:"open"});
         //CSS
         const link = document.createElement("link");
@@ -51,7 +62,7 @@ class IPlayer extends HTMLElement {
         //Options restart Button
         const restartbutton = document.createElement("button");
         restartbutton.setAttribute("class","button");
-        restartbutton.setAttribute("onClick", `step('${id}')`);
+        restartbutton.setAttribute("onClick", "window.location.reload()");
         restartbutton.innerHTML = "Restart";
         //Options Stop Button
         const stopbutton = document.createElement("button");
@@ -63,11 +74,18 @@ class IPlayer extends HTMLElement {
         nextbutton.setAttribute("class","button");
         nextbutton.setAttribute("onClick", `next('${id}')`);
         nextbutton.innerHTML = "Next";
-        //Options play Button
+        //Options Play Button
         const playbutton = document.createElement("button");
         playbutton.setAttribute("class","button");
-        playbutton.setAttribute("onClick", `repeat('${id}')`);
+        playbutton.setAttribute("onClick", `repeat('${id}', 1)`);
+        playbutton.setAttribute("id","repeatbutton");
         playbutton.innerHTML = "Play";
+        //Options Multiplier Button
+        const multbutton = document.createElement("button");
+        multbutton.setAttribute("class","button");
+        multbutton.setAttribute("id","multbutton");
+        multbutton.setAttribute("onClick", `nextmult('${id}',1)`)
+        multbutton.innerHTML = "1x";
         //Screen
         const screen = document.createElement("canvas");
         screen.setAttribute("class", "screen");
@@ -77,11 +95,13 @@ class IPlayer extends HTMLElement {
         opts.appendChild(restartbutton);
         opts.appendChild(stopbutton);
         opts.appendChild(playbutton);
+        opts.appendChild(multbutton);
         opts.appendChild(nextbutton);
         wrapper.appendChild(opts);
         wrapper.appendChild(screen);
 
         this.shadowRoot.append(link, wrapper);
     }
+      
 }
 customElements.define("i-player", IPlayer);
