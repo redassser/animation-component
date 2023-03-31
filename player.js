@@ -1,14 +1,34 @@
 const baseTime = 1500;
-function handleError(e) {
+var intervalID = null;
+
+function handleErr(e) {
     console.error(e);
-    //TODO: Little box for error / end message
+    //TODO: Add little box to show errors / end messages
+    if(intervalID!=null) { 
+        clearInterval(intervalID); 
+        intervalID = null; 
+    }
 }
-async function repeat(id) {
-    step(id);
-    setTimeout(repeat, baseTime, id)
+function repeat(id) {
+    if(intervalID === null) {
+        intervalID = setInterval(step, baseTime, id);
+    }
 }
+function stop(id) {
+    if(intervalID != null) {
+        clearInterval(intervalID); 
+        intervalID = null;
+    }
+}
+function next(id) {
+    if(intervalID === null) {
+        step(id);
+    }
+}
+
+//Base Step functions and single function (promise) to change
 function step(id) {
-    animationStep(id).catch(handleError);
+    animationStep(id).catch(handleErr); 
 }
 
 //HTML for player
@@ -33,23 +53,29 @@ class IPlayer extends HTMLElement {
         restartbutton.setAttribute("class","button");
         restartbutton.setAttribute("onClick", `step('${id}')`);
         restartbutton.innerHTML = "Restart";
+        //Options Stop Button
+        const stopbutton = document.createElement("button");
+        stopbutton.setAttribute("class","button");
+        stopbutton.setAttribute("onClick", `stop('${id}')`);
+        stopbutton.innerHTML = "Stop";
         //Options Step Button
         const nextbutton = document.createElement("button");
         nextbutton.setAttribute("class","button");
-        nextbutton.setAttribute("onClick", `step('${id}')`);
+        nextbutton.setAttribute("onClick", `next('${id}')`);
         nextbutton.innerHTML = "Next";
         //Options play Button
         const playbutton = document.createElement("button");
         playbutton.setAttribute("class","button");
         playbutton.setAttribute("onClick", `repeat('${id}')`);
         playbutton.innerHTML = "Play";
-        
         //Screen
         const screen = document.createElement("canvas");
         screen.setAttribute("class", "screen");
         screen.id = id;
+        
         //Add Children
         opts.appendChild(restartbutton);
+        opts.appendChild(stopbutton);
         opts.appendChild(playbutton);
         opts.appendChild(nextbutton);
         wrapper.appendChild(opts);
