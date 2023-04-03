@@ -3,11 +3,10 @@
     flex-direction: column-reverse;
     align-items: center;
     background-color: lightgray;
-    width: 500px;
-    height: 500px;
     margin: auto;
     margin-top: 1rem;
     outline: 6px solid grey;
+    width: fit-content;
 }
 .options {
     display: flex;
@@ -18,8 +17,4 @@
 }
 .button {
     width: 5rem;
-}
-.screen {
-    width: 100%;
-    height: 100%;
 }

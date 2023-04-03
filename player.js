@@ -1,6 +1,6 @@
 const baseTime = 1500;
 var intervalIDobj = {};
-var namearray = ["default"]
+var namearray = [];
 
 function handleErr(e, id) {
     console.error(e);
@@ -22,7 +22,7 @@ function stop(id) {
     }
 }
 function next(id) {
-    if(intervalIDobj[id]) {
+    if(!intervalIDobj[id]) {
         step(id);
     }
 }
@@ -52,10 +52,13 @@ class IPlayer extends HTMLElement {
         const link = document.createElement("link");
         link.setAttribute("rel", "stylesheet");
         link.setAttribute("href", "playerstyle.css");
-        //ID attr
+        //ID / Name attr
         const id = this.hasAttribute("name") ? this.getAttribute("name") : "default";
         if(namearray.includes(id)) {console.error(`i-player with name ${id} already exists`);return;}
         else {namearray.push(id);}
+        //Type attr
+        const type = this.hasAttribute("type") ? this.getAttribute("type") : "example";
+
         //Wrapper
         const wrapper = document.createElement("div");
         wrapper.setAttribute("class", "wrapper");
