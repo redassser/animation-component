@@ -1,34 +1,35 @@
 const baseTime = 1500;
-var intervalID = null;
+var intervalIDobj = {};
+var namearray = ["default"]
 
-function handleErr(e) {
+function handleErr(e, id) {
     console.error(e);
     //TODO: Add little box to show errors / end messages
-    if(intervalID!=null) { 
-        clearInterval(intervalID); 
-        intervalID = null; 
+    if(intervalIDobj[id]) { 
+        clearInterval(intervalIDobj[id]); 
+        delete intervalIDobj[id]; 
     }
 }
 function repeat(id, mult) {
-    if(intervalID === null) {
-        intervalID = setInterval(step, baseTime/mult, id);
+    if(!intervalIDobj[id]) {
+        intervalIDobj[id] = setInterval(step, baseTime/mult, id);
     }
 }
 function stop(id) {
-    if(intervalID != null) {
-        clearInterval(intervalID); 
-        intervalID = null;
+    if(intervalIDobj[id]) {
+        clearInterval(intervalIDobj[id]); 
+        delete intervalIDobj[id]; 
     }
 }
 function next(id) {
-    if(intervalID === null) {
+    if(intervalIDobj[id]) {
         step(id);
     }
 }
 
 //Base Step functions and single function (promise) to change
 function step(id) {
-    animationStep(id).catch(handleErr); 
+    animationStep(id).catch(e=>handleErr(e,id)); 
 }
 //Mult and html changing
 function nextmult(id, current) {
@@ -52,7 +53,9 @@ class IPlayer extends HTMLElement {
         link.setAttribute("rel", "stylesheet");
         link.setAttribute("href", "playerstyle.css");
         //ID attr
-        const id = this.hasAttribute("name") ? this.getAttribute("name") : "def";
+        const id = this.hasAttribute("name") ? this.getAttribute("name") : "default";
+        if(namearray.includes(id)) {console.error(`i-player with name ${id} already exists`);return;}
+        else {namearray.push(id);}
         //Wrapper
         const wrapper = document.createElement("div");
         wrapper.setAttribute("class", "wrapper");

@@ -1,4 +1,4 @@
-var xlen=10; var first = false;
+//All variables must be initialized as objects and include the player ID
 function animationStep(id) { 
     return new Promise(function(cont, end) {
         const canvas = document.querySelector(`i-player[name='${id}']`).shadowRoot.getElementById(id);

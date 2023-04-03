@@ -6,6 +6,7 @@
     width: 500px;
     height: 500px;
     margin: auto;
+    margin-top: 1rem;
     outline: 6px solid grey;
 }
 .options {
