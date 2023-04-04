@@ -2,19 +2,31 @@
     display: flex;
     flex-direction: column-reverse;
     align-items: center;
-    background-color: lightgray;
+    background-color: black;
     margin: auto;
     margin-top: 1rem;
-    outline: 6px solid grey;
+    outline: 6px solid rgb(65, 63, 73);
     width: fit-content;
 }
 .options {
     display: flex;
-    justify-content: space-evenly;
-    background-color:grey;
+    justify-content: center;
+    background-color:rgb(65, 63, 73);
     padding: 6px;
     width: 100%;
+    gap: 0;
 }
 .button {
-    width: 5rem;
+    width: 4rem;
+    cursor: pointer;
+    color: antiquewhite;
+    font-family: monospace;
+    border: 0;
+    border-left: .4rem solid black;
+    background-color: rgb(29, 29, 29);
+    box-shadow: 0 .2rem #999;
+}
+.button:active {
+    transform: translateY(.1rem);
+    box-shadow: 0 .1rem #999;
 }

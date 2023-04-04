@@ -1,6 +1,6 @@
 var xlen={}, first={};
-//All variables must be initialized as objects and include the player ID
-function animationStep(id) { 
+//All variables must be initialized as objects and include the player ID to individualize
+function exampleAnimationStep(id) { 
     return new Promise(function(cont, end) {
         const canvas = document.querySelector(`i-player[name='${id}']`).shadowRoot.getElementById(id);
         if(canvas===null || !canvas.getContext) {end({error:"Couldn't get canvas", id:id, end:false});}
@@ -8,6 +8,7 @@ function animationStep(id) {
         else {
             const ctx = canvas.getContext("2d");
                 if(!first[id]) {
+                    ctx.strokeStyle = "rgb(250,250,250)";
                     ctx.strokeText("Loading...",10,30);
                     ctx.beginPath();
                     ctx.rect(10,10,250,10);
@@ -15,7 +16,7 @@ function animationStep(id) {
                     first[id]=true;
                     xlen[id]=10;
                 } 
-                ctx.fillStyle = "rgb(50,50,50)";
+                ctx.fillStyle = "rgb(250,250,250)";
                 ctx.fillRect(xlen[id],10,10,10);
             xlen[id]+=10;
             cont();
