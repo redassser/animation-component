@@ -30,3 +30,7 @@
     transform: translateY(.1rem);
     box-shadow: 0 .1rem #999;
 }
+.button:disabled {
+    transform: translateY(.1rem);
+    box-shadow: 0 .1rem #999;
+}

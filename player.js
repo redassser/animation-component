@@ -33,6 +33,20 @@ class IPlayer extends HTMLElement {
         this.mult = multarray[multarray.indexOf(this.mult)+1] ?? multarray[0];
         this.shadowRoot.getElementById("multbutton").innerHTML = this.mult+"x";
     }
+    intervalCheck() {
+        const dis = this.shadowRoot.lastChild.firstChild.children;
+        if(this.intervalID===null) {
+            dis[1].disabled = true;
+            dis[2].disabled = false;
+            dis[3].disabled = false;
+            dis[4].disabled = false;
+        } else {
+            dis[1].disabled = false;
+            dis[2].disabled = true;
+            dis[3].disabled = true;
+            dis[4].disabled = true;
+        }
+    }
     handleErr(e, _intervalID = this.intervalID) {
         console.error(e);
         //TODO: Add little box to show errors / end messages
@@ -76,6 +90,7 @@ class IPlayer extends HTMLElement {
         stopbutton.setAttribute("class","button");
         stopbutton.onclick = () => {
             this.stop();
+            this.intervalCheck();
         }
         stopbutton.innerHTML = "Stop";
         //Options Step Button
@@ -83,6 +98,7 @@ class IPlayer extends HTMLElement {
         nextbutton.setAttribute("class","button");
         nextbutton.onclick = () => {
             this.next();
+            this.intervalCheck();
         }
         nextbutton.innerHTML = "Next";
         //Options Play Button
@@ -90,6 +106,7 @@ class IPlayer extends HTMLElement {
         playbutton.setAttribute("class","button");
         playbutton.onclick = () => {
             this.repeat();
+            this.intervalCheck();
         }
         playbutton.id = "repeatbutton";
         playbutton.innerHTML = "Play";
@@ -98,6 +115,7 @@ class IPlayer extends HTMLElement {
         multbutton.setAttribute("class","button");
         multbutton.onclick = () => {
             this.nextmult();
+            this.intervalCheck();
         }
         multbutton.id = "multbutton";
         multbutton.innerHTML = "1x";
@@ -114,8 +132,8 @@ class IPlayer extends HTMLElement {
         opts.appendChild(nextbutton);
         wrapper.appendChild(opts);
         wrapper.appendChild(screen);
-
         this.shadowRoot.append(link, wrapper);
+        this.intervalCheck()
     }
       
 }
