@@ -43,6 +43,7 @@ class IPlayer extends HTMLElement {
     }
     intervalCheck(_this = this) {
         const dis = _this.shadowRoot.lastChild.firstChild.children;
+        console.log(_this.intervalID, dis)
         if(_this.intervalID===null) { // Not Playing
             dis[0].disabled = false;
             dis[1].disabled = true;
@@ -114,6 +115,7 @@ class IPlayer extends HTMLElement {
         stopbutton.setAttribute("class","button");
         stopbutton.onclick = () => {
             this.stop();
+            this.intervalCheck();
         }
         stopbutton.innerHTML = "Stop";
         //Options Step Button
