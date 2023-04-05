@@ -2,12 +2,13 @@ var xlen={}, first={};
 //All variables must be initialized as objects and include the player ID to individualize
 function exampleAnimationStep(id) { 
     return new Promise(function(cont, end) {
-        const canvas = document.querySelector(`i-player[name='${id}']`).shadowRoot.getElementById(id);
-        if(canvas===null || !canvas.getContext) {end({error:"Couldn't get canvas", id:id, end:false});}
+        const canvas = document.querySelector(`i-player[name='${id}']`);
+        if(canvas===null) {end({error:"Couldn't get canvas", id:id, end:false});}
         else if(xlen[id]>250) end({error:"End of animation", id:id, end:true})
         else {
-            const ctx = canvas.getContext("2d");
+            const ctx = canvas.shadowRoot.getElementById(id).getContext("2d");
                 if(!first[id]) {
+                    ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
                     ctx.strokeStyle = "rgb(250,250,250)";
                     ctx.strokeText("Loading...",10,30);
                     ctx.beginPath();
@@ -22,4 +23,12 @@ function exampleAnimationStep(id) {
             cont();
         }   
     });
+}
+function exampleAnimationRestart(id) {
+    first[id]=false; xlen[id]=0;
+    exampleAnimationStep(id).catch(console.error);
+}
+function exampleAnimationEnd(id) {
+    while(xlen[id]<=250) 
+        exampleAnimationStep(id).catch(console.error);
 }
