@@ -1,50 +1,15 @@
 const baseTime = 1500;
 var namearray = [];
 //HTML for player
-class IPlayer extends HTMLElement {  
+class IPlayer extends HTMLElement { 
     constructor() {
         super();
-        this.func; this.restart; this.end;
-        this.id;
+        this.animated;
         this.mult = 1;
-        this.intervalID = null;
-    }
-    //Base Step functions and single function (promise) to change
-    next() {
-        if(this.intervalID === null)
-            this.step();
-    }
-    restartnow() {
-        if(this.intervalID === null) 
-            this.restart(this.id);
-    }
-    endnow() {
-        if(this.intervalID === null)
-            this.end(this.id);
-    }
-    repeat() {
-        if(this.intervalID === null)
-        this.intervalID = setInterval(this.step, baseTime/this.mult, this);
-    }
-    stop() {
-        if(this.intervalID != null) {
-            clearInterval(this.intervalID); 
-            this.intervalID = null;
-        }
-    }
-    step(_this = this) { 
-        _this.func(_this.id).catch(e=>_this.handleErr(e,_this)); 
-    }
-    
-    nextmult() {
-        const multarray = [1,2,4,8]; 
-        this.mult = multarray[multarray.indexOf(this.mult)+1] ?? multarray[0];
-        this.shadowRoot.getElementById("multbutton").innerHTML = this.mult+"x";
-    }
-    intervalCheck(_this = this) {
-        const dis = _this.shadowRoot.lastChild.firstChild.children;
-        console.log(_this.intervalID, dis)
-        if(_this.intervalID===null) { // Not Playing
+    } 
+    intervalCheck() {
+        const dis = this.shadowRoot.lastChild.firstChild.children;
+        if(this.animated.intervalID===null) { // Not Playing
             dis[0].disabled = false;
             dis[1].disabled = true;
             dis[2].disabled = false;
@@ -60,16 +25,6 @@ class IPlayer extends HTMLElement {
             dis[5].disabled = true;
         }
     }
-    handleErr(e, _this = this) {
-        console.error(e);
-        _this.shadowRoot.lastChild.lastChild.lastChild.innerHTML = e.error;
-        setTimeout(()=>_this.shadowRoot.lastChild.lastChild.lastChild.innerHTML="",2000)
-        if(_this.intervalID != null) { 
-            clearInterval(_this.intervalID); 
-            _this.intervalID = null;
-            _this.intervalCheck();
-        }
-    }
     connectedCallback() {
         this.attachShadow({mode:"open"});
         //CSS
@@ -77,18 +32,18 @@ class IPlayer extends HTMLElement {
         link.setAttribute("rel", "stylesheet");
         link.setAttribute("href", "playerstyle.css");
         //ID / Name attr
-        this.id = this.hasAttribute("name") ? this.getAttribute("name") : "default";
-        if(namearray.includes(this.id)) {console.error(`i-player with name ${this.id} already exists`);return;}
-        else {namearray.push(this.id);}
+        const id = this.hasAttribute("name") ? this.getAttribute("name") : "default";
+        if(namearray.includes(id)) {console.error(`i-player with name ${id} already exists`);return;}
+        else {namearray.push(id);}
         //Type attr
         const type = this.hasAttribute("type") ? this.getAttribute("type") : "none";
-        //TODO: ADD MORE ANIMATIONS
         switch(type) {
+            case "quiksort":
+                //this.animated = new Quiksort(this.shadowRoot);
+                break;
             case "example":
             default:
-                this.func = exampleAnimationStep;
-                this.restart = exampleAnimationRestart;
-                this.end = exampleAnimationEnd;
+                this.animated = new Animated(this, id);
                 break;
         }
         //Wrapper
@@ -107,14 +62,14 @@ class IPlayer extends HTMLElement {
         const restartbutton = document.createElement("button");
         restartbutton.setAttribute("class","button");
         restartbutton.onclick = () => {
-            this.restartnow();
+            this.animated.restart();
         }
         restartbutton.innerHTML = "Restart";
         //Options Stop Button
         const stopbutton = document.createElement("button");
         stopbutton.setAttribute("class","button");
         stopbutton.onclick = () => {
-            this.stop();
+            this.animated.stop();
             this.intervalCheck();
         }
         stopbutton.innerHTML = "Stop";
@@ -122,15 +77,14 @@ class IPlayer extends HTMLElement {
         const nextbutton = document.createElement("button");
         nextbutton.setAttribute("class","button");
         nextbutton.onclick = () => {
-            this.next();
-            this.intervalCheck();
+            this.animated.next();
         }
         nextbutton.innerHTML = "Next";
         //Options Play Button
         const playbutton = document.createElement("button");
         playbutton.setAttribute("class","button");
-        playbutton.onclick = () => {
-            this.repeat();
+        playbutton.onclick = async () => {
+            this.animated.repeat();
             this.intervalCheck();
         }
         playbutton.id = "repeatbutton";
@@ -139,7 +93,7 @@ class IPlayer extends HTMLElement {
         const multbutton = document.createElement("button");
         multbutton.setAttribute("class","button");
         multbutton.onclick = () => {
-            this.nextmult();
+            this.animated.nextmultiplier();
         }
         multbutton.id = "multbutton";
         multbutton.innerHTML = "1x";
@@ -147,14 +101,14 @@ class IPlayer extends HTMLElement {
         const endbutton = document.createElement("button");
         endbutton.setAttribute("class","button");
         endbutton.onclick = () => {
-            this.endnow();
+            this.animated.end();
         }
         endbutton.id = "endbutton";
         endbutton.innerHTML = "End";
         //Screen
-        const screen = document.createElement("canvas");
+        const screen = document.createElement("div");
         screen.setAttribute("class", "screen");
-        screen.id = this.id;
+        screen.id = "svg"+id;
         
         //Add Children
         opts.appendChild(restartbutton);
@@ -168,8 +122,8 @@ class IPlayer extends HTMLElement {
         wrapper.appendChild(screen);
         wrapper.appendChild(messagewrap);
         this.shadowRoot.append(link, wrapper);
+        this.animated.make();
         this.intervalCheck();
-        this.restartnow();
     }
       
 }
