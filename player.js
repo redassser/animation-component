@@ -31,6 +31,8 @@ class IPlayer extends HTMLElement {
         const link = document.createElement("link");
         link.setAttribute("rel", "stylesheet");
         link.setAttribute("href", "playerstyle.css");
+        // DATA
+        const data = this.hasAttribute("data") ? this.getAttribute("data") : undefined;
         //ID / Name attr
         const id = this.hasAttribute("name") ? this.getAttribute("name") : "default";
         if(namearray.includes(id)) {console.error(`i-player with name ${id} already exists`);return;}
@@ -39,7 +41,7 @@ class IPlayer extends HTMLElement {
         const type = this.hasAttribute("type") ? this.getAttribute("type") : "none";
         switch(type) {
             case "quiksort":
-                //this.animated = new Quiksort(this.shadowRoot);
+                this.animated = new Quiksort(this, id, data);
                 break;
             case "example":
             default:

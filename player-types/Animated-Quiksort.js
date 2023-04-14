@@ -1,23 +1,31 @@
 class Quiksort extends Animated {
+    x;
     i;
     j;
-    temp;
-    constructor(container, id, size = 64) {
+    temp; text;
+    constructor(container, id, data) {
       super(container, id);
-      this.size = size;
-      this.temp = new Uint32Array[1];
-      this.x = new Uint32Array[size];
-      this.randomize();
-      this.orig = x; // save original state so we can restart and do it again with same data
+      const input = data ? data.length : 10;
+      this.x = new Uint32Array(input);
+      if(data===undefined) {
+        this.randomize();
+      } 
+      this.temp = new Uint32Array([1]);
+      this.orig = this.x; // save original state so we can restart and do it again with same data
     }
-  
+    make() { // Called immediately opon connecting to DOM (must select here)
+      this.svg = d3.select(this.cont.getElementById("svg"+this.id))
+        .append("svg").attr("width", "100%").attr("height", "100%");
+      this.text = this.svg.append("text")
+        .text(this.x.join(" "))
+    }
     randomize() {
       for (var i = 0; i < this.x.length; i++)
-        x[i] = Math.floor(this.size*Math.random());
+        x[i] = Math.floor(this.x.length*Math.random());
     }
   
     pickPivot() {
-      return this.x[Math.floor(this.size*Math.random())];
+      return this.x[Math.floor(this.x.length*Math.random())];
     }
     // pick a random pivot, and partition into two pieces < pivot and >= pivot
     // using the original quiksort partitioning scheme
