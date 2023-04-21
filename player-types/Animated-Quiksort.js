@@ -1,3 +1,4 @@
+const Animated = require("./Animated-class");
 class Quiksort extends Animated {
     x;
     i;
@@ -127,4 +128,5 @@ class Quiksort extends Animated {
     render() {
       
     }
-  }
+}
+module.exports = Quiksort;

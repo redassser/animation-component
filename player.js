@@ -1,3 +1,5 @@
+const Animated = require("./player-types/Animated-class");
+const Quiksort = require("./player-types/Animated-Quiksort");
 const baseTime = 1500;
 var namearray = [];
 //HTML for player

@@ -76,3 +76,4 @@ class Animated {
         }
     }
 }
+module.exports = Animated;

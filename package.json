@@ -1,0 +1,7 @@
+{
+    "name": "idoc-library",
+    "version": "0.0.1",
+    "scripts": {
+        "build": "browserify player.js > i-player-bundle.js"
+    }
+}
