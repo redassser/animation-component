@@ -1,4 +1,4 @@
-class Animated {
+export default class Animated {
     delayForTransition = 200;
     delayBetweenFrames = 1000;
     intervalID = null;
@@ -76,4 +76,3 @@ class Animated {
         }
     }
 }
-module.exports = Animated;

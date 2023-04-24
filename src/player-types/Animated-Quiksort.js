@@ -1,5 +1,5 @@
-const Animated = require("./Animated-class");
-class Quiksort extends Animated {
+import Animated from "./Animated-class.js";
+export default class Quiksort extends Animated {
     x;
     i;
     j;
@@ -129,4 +129,3 @@ class Quiksort extends Animated {
       
     }
 }
-module.exports = Quiksort;

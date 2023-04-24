@@ -1,5 +1,6 @@
-const Animated = require("./player-types/Animated-class");
-const Quiksort = require("./player-types/Animated-Quiksort");
+import Animated from "./player-types/Animated-class.js";
+import Quiksort from "./player-types/Animated-Quiksort.js";
+import playerstyle from "./playerstyle.css";
 const baseTime = 1500;
 var namearray = [];
 //HTML for player
@@ -30,9 +31,9 @@ class IPlayer extends HTMLElement {
     connectedCallback() {
         this.attachShadow({mode:"open"});
         //CSS
-        const link = document.createElement("link");
-        link.setAttribute("rel", "stylesheet");
-        link.setAttribute("href", "playerstyle.css");
+        const style = document.createElement("style");
+            style.innerHTML = playerstyle;
+            this.shadowRoot.appendChild(style);
         // DATA
         const data = this.hasAttribute("data") ? this.getAttribute("data") : undefined;
         //ID / Name attr
@@ -125,7 +126,7 @@ class IPlayer extends HTMLElement {
         wrapper.appendChild(opts);
         wrapper.appendChild(screen);
         wrapper.appendChild(messagewrap);
-        this.shadowRoot.append(link, wrapper);
+        this.shadowRoot.append(wrapper);
         this.animated.make();
         this.intervalCheck();
     }
